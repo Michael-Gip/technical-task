@@ -7,11 +7,24 @@
 
 /* --- Base rules --- */
 body {
+  margin: 0;
+  padding: 0;
   background: #e8e7e7;
 }
 h1 {
-  font: 2.25‬em Raleway;
+  margin: 0px 0px 34px 7.568807339449541%;
+  color: #060606;
+  font-weight: 100;
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.25em;
+  letter-spacing: 2px;
+}
+section {
+  margin-left: 12.5%;
 }
 h2 {
-  
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
 }
+
+
