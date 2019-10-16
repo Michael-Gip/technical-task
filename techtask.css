@@ -19,12 +19,64 @@ h1 {
   font-size: 2.25em;
   letter-spacing: 2px;
 }
-section {
-  margin-left: 12.5%;
-}
 h2 {
-  font-family: 'EB Garamond', serif;
+  float: left;
+  margin: 0 3.725782414307004% 0 0;
+  font-family: 'Alice', serif;
   font-weight: 500;
+}
+
+/* --- layout rules --- */
+#wrapper {
+  margin: 0 auto;
+  padding-top: 26px;
+  padding-bottom: 15px;
+  width: 45.82238570677877%;
+  background: #fff;
+  box-shadow: 5px 5px 10px #c5c5c5, -5px -5px 10px #c5c5c5;
+}
+
+/* --- Modules --- */
+/* section for each layer of user experience */
+.layer {
+  margin: 0 10.55045871559633% 21px 12.5%;
+  min-height: 300px;/* 512px */
+  border-bottom: solid 3px #b0b0b0;
+  font: 1em 'Trebuchet MS', sans-serif;
+}
+.layer-describe {
+  position: relative;
+}
+.layer-describe p {
+  margin-left: 2.831594634873323%;
+  width: 97.16840536512668%;
+  background: #f1f1f1;
+  color: #868686;
+  overflow: hidden;
+}
+
+/* button to create a new statement in any layer */
+.newStatement {
+  border-right: solid 1px #cdced0;
+  border-bottom: solid 1px #bbbcbd;
+  border-left: solid 1px #cdced0;
+  border-radius: 3px;
+  padding: 5px 23px;
+  color: #868585;
+  font: 1em 'Trebuchet MS', sans-serif;
+  cursor: pointer;
+}
+
+/* delete button */
+.deleteStatement {
+  position: absolute;
+  right: 0;
+  border: solid 1px #ccc;
+  padding: 0 4px 2px;
+  color: #727272;
+  background-image: linear-gradient(#f7f7f7, #ddd);
+  font: 0.9em/1 'Trebuchet MS', sans-serif;
+  margin: -16px -16px 0 0;
 }
 
 
