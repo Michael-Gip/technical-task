@@ -16,7 +16,7 @@ const newBlock = (function () {
       editEl.innerHTML = content;
     }
     delBut.innerHTML = "x";
-    delBut.addEventListener("click", blockToDelete);
+    delBut.addEventListener("click", toDeleteBlock);
     wrapper.appendChild(editEl);
     wrapper.appendChild(delBut);
     return wrapper;
@@ -25,7 +25,7 @@ const newBlock = (function () {
   function getAppropKey(event) {
     const eventEl = event.target,
       keyWord = eventEl.getAttribute("data-containerPurpose")
-    let keyIndex = 1;
+    let identifIndex = 1;
     allExistKeys = [];
     // Get access to statement container
     statementContain = getContainer(event);
@@ -36,11 +36,11 @@ const newBlock = (function () {
         allExistKeys[index] = item.getAttribute("data-point");
       });
       // Loop through collection to find which certain keyword with certain index still isn't
-      while (allExistKeys.includes(keyWord + "_" + keyIndex)) {
-        keyIndex++;
+      while (allExistKeys.includes(keyWord + "_" + identifIndex)) {
+        identifIndex++;
       }
     }
-    return keyWord + "_" + keyIndex;
+    return keyWord + "_" + identifIndex;
   }
   // To get all keys with certain keyword from localStorage
   function getAppropKeys(keyWord) {
@@ -75,27 +75,8 @@ const newBlock = (function () {
   }
 })();
 
-/* event adding a new statement */
-const creatingButs = document.querySelectorAll(".newStatement");
-creatingButs.forEach(function (item) {
-  item.addEventListener("click", addNewBlock);
-});
-
-function addNewBlock(event) {
-  const key = newBlock.getAppropKey(event),
-    block = newBlock.toCreateBlock("p", "span", "button", key);
-  // To find current container
-  container = newBlock.getContainer(event);
-  container.appendChild(block);
-}
-
-/* To delete default text from statement block */
-function delDefaultText(event) {
-  event.target.innerHTML = "";
-}
-
-/* For work with localStorage */
-const workWithStorage = (function () {
+/* Store and extract localStorage keys */
+const storExtStatement = (function () {
   // Store key/content in localStorage
   function storeInLocal(event) {
     const editEl = event.target,
@@ -109,32 +90,49 @@ const workWithStorage = (function () {
   }
 })();
 
+/* event adding a new statement */
+function addNewBlock(event) {
+  const key = newBlock.getAppropKey(event),
+    block = newBlock.toCreateBlock("p", "span", "button", key);
+  // To find current container
+  container = newBlock.getContainer(event);
+  container.appendChild(block);
+}
+
+/* To delete default text from statement block */
+function delDefaultText(event) {
+  event.target.innerHTML = "";
+}
+/* Enter a new statement to save */
 function storeContent(event) {
-  workWithStorage.storeInLocal(event);
+  storExtStatement.storeInLocal(event);
 }
 
 /* To delete statement block */
-function blockToDelete(event) {
+function toDeleteBlock(event) {
   //Get and remove localStorage key
-  const wrapperBlock = (event.target).closest("p"),
-    editEl = wrapperBlock.querySelector("[data-point]"),
+  const block = (event.target).closest("p"),
+    editEl = block.querySelector("[data-point]"),
     theKey = editEl.getAttribute("data-point");
   localStorage.removeItem(theKey);
   //Remove block itself
-  wrapperBlock.remove();
+  block.remove();
 }
 
-/* Page state re-creation */
+/* Page launch code */
 (function () {
-  // Extract all indexis of certain string identifier
   const creatingButs = document.querySelectorAll(".newStatement");
-  creatingButs.forEach(function (item, index) {
+  creatingButs.forEach(function (item) {
+    item.addEventListener("click", addNewBlock);
+  });
+  // Extract all indexis of certain string identifier
+  creatingButs.forEach(function (item) {
     const keyWord = item.getAttribute("data-containerPurpose");
     const allIndexes = newBlock.getAppropKeys(keyWord);
     // Re-create existing statements
     if (allIndexes.length !== 0) {
-      allIndexes.forEach(function (item, index) {
-        const key = keyWord + "_" + allIndexes[index],
+      allIndexes.forEach(function (item) {
+        const key = keyWord + "_" + item,
           content = localStorage.getItem(key),
           container = newBlock.getContainer(keyWord),
           block = newBlock.toCreateBlock("p", "span", "button", key, content);
