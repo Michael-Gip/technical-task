@@ -1,0 +1,114 @@
+/*
+  css version: 3.0
+  created:     29.09.19
+  author:      Michael Gipsman
+  email:       gipsman@gmail.com
+*/
+
+/* --- Base rules --- */
+body {
+  margin: 0;
+  padding: 0;
+  background: #e8e7e7;
+}
+h1 {
+  margin: 0px 0px 34px 7.568807339449541%;
+  color: #060606;
+  font-weight: 100;
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.25em;
+  letter-spacing: 2px;
+}
+h2 {
+  float: left;
+  margin: 0 3.725782414307004% 0 0;
+  font-family: 'Alice', serif;
+  font-weight: 500;
+}
+
+
+/* --- layout rules --- */
+#wrapper {
+  margin: 0 auto;
+  padding-top: 26px;
+  padding-bottom: 15px;
+  width: 45.82238570677877%;
+  background: #fff;
+  box-shadow: 5px 5px 10px #c5c5c5, -5px -5px 10px #c5c5c5;
+}
+
+/* --- Modules --- */
+/* section for each layer of user experience */
+.layer {
+  margin: 0 10.55045871559633% 21px 12.5%;
+  min-height: 300px;/* 512px */
+  border-bottom: solid 3px #b0b0b0;
+  font: 1em 'Trebuchet MS', sans-serif;
+}
+.layerDescription {
+  position: relative;
+}
+.layerDescription p {
+  margin-left: 2.831594634873323%;
+  background: #f1f1f1;
+  color: #868686;
+  overflow: hidden;
+}
+.layerDescription > p > span {
+  display: inline-block;
+  padding: 3px 6px;
+  word-break: break-all;
+}
+.layerDescription > p > button {
+  position: absolute;
+  right: 0;
+  border: solid 1px #ccc;
+  padding: 0 4px 2px;
+  margin: -16px -16px 0 0;
+  color: #727272;
+  background-image: linear-gradient(#f7f7f7, #ddd);
+  font: 0.9em/1 'Trebuchet MS', sans-serif;
+  cursor: pointer;
+}
+
+/* button to create a new statement in any layer */
+.newStatement {
+  border-right: solid 1px #cdced0;
+  border-bottom: solid 1px #bbbcbd;
+  border-left: solid 1px #cdced0;
+  border-radius: 3px;
+  padding: 5px 23px;
+  color: #868585;
+  font: 1em 'Trebuchet MS', sans-serif;
+  cursor: pointer;
+}
+@media screen and (max-width: 1100px) {
+  .newStatement {
+    padding: 2px 15px 3px;
+    font: 0.99526315789473688em 'Trebuchet MS', sans-serif;
+  }
+}
+@media screen and (max-width: 1013px) {
+  .newStatement {
+    display: block;
+    margin: 10px auto;
+  }
+}
+
+/* --- States --- */
+a:hover {
+  cursor: pointer;
+}
+button:focus {
+  outline:0 !important;
+}
+button:active {
+  border-top: none;
+}
+@media screen and (max-width: 1013px) {
+  h2 {
+    float: none;
+    margin: auto;
+    text-align: center;
+  }
+}
