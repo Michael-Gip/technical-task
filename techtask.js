@@ -53,7 +53,9 @@ const newBlock = (function () {
         index++;
       }
     }
-    identifIndexes.sort();
+    identifIndexes.sort(function(a, b) {
+      return a-b;
+    });
     return identifIndexes;
   }
   // To get access to necessary container
@@ -131,10 +133,10 @@ function toDeleteBlock(event) {
     const allIndexes = newBlock.getAppropKeys(keyWord);
     // Re-create existing statements
     if (allIndexes.length !== 0) {
+      const container = newBlock.getContainer(keyWord);
       allIndexes.forEach(function (item) {
         const key = keyWord + "_" + item,
           content = localStorage.getItem(key),
-          container = newBlock.getContainer(keyWord),
           block = newBlock.toCreateBlock("p", "span", "button", key, content);
         container.appendChild(block);
       });
