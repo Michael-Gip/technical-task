@@ -1,1 +1,1 @@
-# technical-task
+# Page for creating technical task
