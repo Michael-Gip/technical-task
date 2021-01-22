@@ -57,6 +57,7 @@ h2 {
 .layerDescription > p > span {
   display: inline-block;
   padding: 3px 6px;
+  word-break: break-all;
 }
 .layerDescription > p > button {
   position: absolute;
@@ -81,11 +82,33 @@ h2 {
   font: 1em 'Trebuchet MS', sans-serif;
   cursor: pointer;
 }
+@media screen and (max-width: 1100px) {
+  .newStatement {
+    padding: 2px 15px 3px;
+    font: 0.99526315789473688em 'Trebuchet MS', sans-serif;
+  }
+}
+@media screen and (max-width: 1013px) {
+  .newStatement {
+    display: block;
+    margin: 10px auto;
+  }
+}
 
 /* --- States --- */
+a:hover {
+  cursor: pointer;
+}
 button:focus {
   outline:0 !important;
 }
 button:active {
   border-top: none;
+}
+@media screen and (max-width: 1013px) {
+  h2 {
+    float: none;
+    margin: auto;
+    text-align: center;
+  }
 }

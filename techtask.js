@@ -86,7 +86,6 @@ const storExtStatement = (function () {
       content = editEl.innerHTML;
     localStorage.setItem(key, content);
   }
-  // Extract all indexes which are in localStorage with a specific keyWord
   return {
     storeInLocal: storeInLocal
   }
@@ -103,7 +102,10 @@ function addNewBlock(event) {
 
 /* To delete default text from statement block */
 function delDefaultText(event) {
-  event.target.innerHTML = "";
+  const el = event.target;
+  if (el.innerHTML === "Write new statement") {
+    el.innerHTML = "";
+  }
 }
 /* Enter a new statement to save */
 function storeContent(event) {
