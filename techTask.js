@@ -1,15 +1,29 @@
-class DescriptionsModule {
+class StatementsModule {
   save(key, description) {
 
   }
   delete(key) {
 
   }
-  // to get all existing statements identifiers with certain word
+  // to get all existing identifiers of certain  key word
   getIdentifsByKeyword(keyword) {
-    return localStorage()
+    const keywordPattern = RegExp(keyword),
+    identifIndexes = [];
+    let index = 0;
+    for (key in localStorage) {
+      // also outputs few built-in fields that we don’t need. So we need to filter them
+      if (localStorage.hasOwnProperty(key) && keywordPattern.test(key)) {
+        identifIndexes[index] = Number(/\d+/.exec(key));
+        index++;
+      }
+    }
+    identifIndexes.sort(function (a, b) {
+      return a - b;
+    });
+    return identifIndexes;
   }
 }
+
 
 // View of section elements, statements. 
 class sectionItemView {
@@ -30,5 +44,5 @@ class sectionItemView {
 
 // Application logic
 class Controller {
-  
+
 }
