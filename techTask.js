@@ -6,21 +6,21 @@ class StatementsModule {
 
   }
   // to get all existing identifiers of certain  key word
-  getIdentifsByKeyword(keyword) {
+  getKeyIndexes(keyword) {
     const keywordPattern = RegExp(keyword),
-    identifIndexes = [];
+    keyIndexes = [];
     let index = 0;
     for (key in localStorage) {
       // also outputs few built-in fields that we don’t need. So we need to filter them
       if (localStorage.hasOwnProperty(key) && keywordPattern.test(key)) {
-        identifIndexes[index] = Number(/\d+/.exec(key));
+        keyIndexes[index] = Number(/\d+/.exec(key));
         index++;
       }
     }
-    identifIndexes.sort(function (a, b) {
+    keyIndexes.sort(function (a, b) {
       return a - b;
     });
-    return identifIndexes;
+    return keyIndexes;
   }
 }
 
@@ -37,12 +37,23 @@ class sectionItemView {
     this.delButton.innerHTML = "x";
     // TODO: Don't foget about events
   }
-  render() {
-
+  render(dataModel) {
+    const keyWord = this.section.getAttribute('id');
+    dataModel.forEach((keyIndex) => {
+      this.sectiion.append(this.createStatement(localStorage.getItem(`${keyWord}_${keyIndex}`)));
+    });
+    // TODO: Don't foget about events
+  }
+  createStatement() {
+    
   }
 }
 
 // Application logic
 class Controller {
-
+  initialize() {
+    const dataModel = this.model.getKeyIndexes();
+    this.view.render(dataModel);
+  //  TODO: Don't foget about events
+  }
 }
