@@ -1,4 +1,4 @@
-class StatementsModule {
+class StatementModule {
   save(key, description) {
 
   }
@@ -45,7 +45,7 @@ class sectionItemView {
     // TODO: Don't foget about events
   }
   createStatement() {
-    
+
   }
 }
 
