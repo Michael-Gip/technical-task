@@ -73,7 +73,7 @@ class ParentView {
 // Application logic
 class Controller {
   initialize() {
-    this.view.render(dataModel);
+    this.view.render();
     //  TODO: Don't foget about events
   }
   bindEvent() {
