@@ -8,7 +8,7 @@ class StatementModule {
   // to get all existing identifiers of certain  key word
   getKeyIndexes(keyword) {
     const keywordPattern = RegExp(keyword),
-    keyIndexes = [];
+      keyIndexes = [];
     let index = 0;
     for (key in localStorage) {
       // also outputs few built-in fields that we don’t need. So we need to filter them
@@ -33,27 +33,60 @@ class sectionItemView {
     this.container = document.createElement('p');
     this.editElement = document.createElement('span');
     this.delButton = document.createElement('button');
-    this.editEl.setAttribute("contenteditable", "true");
+    this.editElement.setAttribute("contenteditable", "true");
     this.delButton.innerHTML = "x";
     // TODO: Don't foget about events
   }
-  render(dataModel) {
-    const keyWord = this.section.getAttribute('id');
+  // Recreating the app after restart
+  render() {
+    const keyWord = this.section.getAttribute('id'),
+    dataModel = observer.publish('view.statement-getIndexes', keyWord);
     dataModel.forEach((keyIndex) => {
-      this.sectiion.append(this.createStatement(localStorage.getItem(`${keyWord}_${keyIndex}`)));
+      this.sectiion.append(this.createStatement(`${keyWord}_${keyIndex}`));
     });
     // TODO: Don't foget about events
   }
-  createStatement() {
+  // Create structure for statement
+  createStatement(key) {
+    const container = this.container.cloneNode(false),
+      editElement = this.editElement.cloneNode(false),
+      delButton = this.delButton.cloneNode(true);
+    editElement.setAttribute('data-point', key);
+    key === undefined ? editElement.innerHTML = "Write new statement" : editElement.innerHTML = localStorage.getItem(key);
+    container.appendChild(editElement).appendChild(delButton);
+    return container;
+  }
+}
 
+// General View
+class ParentView {
+  constructor(views) {
+    this.views = views || [];
+  }
+  render(dataModel) {
+    this.views.forEach((view) => {
+      view.render(dataModel);
+    })
   }
 }
 
 // Application logic
 class Controller {
   initialize() {
-    const dataModel = this.model.getKeyIndexes();
     this.view.render(dataModel);
-  //  TODO: Don't foget about events
+    //  TODO: Don't foget about events
+  }
+  bindEvent() {
+    const that = this;
+    observer.subscribe('view.statement-getIndexes', function(keyWord) {
+      that.getKeyIndexes(keyWord);
+    });
+  }
+  // My controller itself does not provide data for the views, but allows each render method to get the data using its methods.
+  getIndexes(keyWord) {
+    this.model.getKeyIndexes(keyWord);
   }
 }
+
+// TODO 
+// переместить скачанные в торрент книгу о паттернах в книги
