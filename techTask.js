@@ -5,6 +5,27 @@ class StatementModule {
   delete(key) {
 
   }
+  // Finds appropriate key for a new statement
+  getKey(event) {
+    const eventEl = event.target,
+      keyWord = eventEl.getAttribute("data-containerPurpose");
+    let identifIndex = 1;
+    allExistKeys = [];
+    // Get access to statement container
+    statementContainer = observer.publish('model.statement-getContainer', event);
+    // Get all created statements keys
+    const createdStatements = statementContainer.querySelectorAll("[data-point]");
+    if (createdStatements.length !== 0) {
+      createdStatements.forEach(function (item, index) {
+        allExistKeys[index] = item.getAttribute("data-point");
+      });
+      // Loop through collection to find which certain keyword with certain index still isn't
+      while (allExistKeys.includes(keyWord + "_" + identifIndex)) {
+        identifIndex++;
+      }
+    }
+    return keyWord + "_" + identifIndex;
+  }
   // to get all existing identifiers of certain  key word
   getKeyIndexes(keyword) {
     const keywordPattern = RegExp(keyword),
@@ -40,11 +61,24 @@ class sectionItemView {
   // Recreating the app after restart
   render() {
     const keyWord = this.section.getAttribute('id'),
-    dataModel = observer.publish('view.statement-getIndexes', keyWord);
+      dataModel = observer.publish('view.statement-getIndexes', keyWord);
     dataModel.forEach((keyIndex) => {
       this.sectiion.append(this.createStatement(`${keyWord}_${keyIndex}`));
     });
-    // TODO: Don't foget about events
+  }
+  bindEvent() {
+    const that = this;
+    // the creation event of new statement
+    const creationButton = this.section.querySelector('[data-containerpurpose]');
+    creationButton.addEventListener('click', function (event) {
+
+    })
+    this.delButton.addEventListener('click', function () {
+
+    });
+    observer.subscribe('model.statement-getContainer', function() {
+      that.getContainer(accessToButton);
+    });
   }
   // Create structure for statement
   createStatement(key) {
@@ -54,6 +88,16 @@ class sectionItemView {
     editElement.setAttribute('data-point', key);
     key === undefined ? editElement.innerHTML = "Write new statement" : editElement.innerHTML = localStorage.getItem(key);
     container.appendChild(editElement).appendChild(delButton);
+    return container;
+  }
+  getContainer(accessToButton) {
+    if (typeof accessToButton === "object") {
+      const button = accessToButton.target;
+    } else {
+      var button = document.querySelector("[data-containerPurpose = " + accessToButton + "]");
+    }
+    const section = button.closest(".layer"),
+    container = section.querySelector(".layerDescription");
     return container;
   }
 }
@@ -70,6 +114,7 @@ class ParentView {
   }
 }
 
+
 // Application logic
 class Controller {
   initialize() {
@@ -78,7 +123,7 @@ class Controller {
   }
   bindEvent() {
     const that = this;
-    observer.subscribe('view.statement-getIndexes', function(keyWord) {
+    observer.subscribe('view.statement-getIndexes', function (keyWord) {
       that.getKeyIndexes(keyWord);
     });
   }
@@ -88,5 +133,7 @@ class Controller {
   }
 }
 
-// TODO 
-// переместить скачанные в торрент книгу о паттернах в книги
+
+
+// observer.publish('view.statement-key.add', ) -- хорошее имя события, использовать
+// TODO переместить скачанные в торрент книгу о паттернах в книги
