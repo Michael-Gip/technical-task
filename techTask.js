@@ -2,13 +2,13 @@ class StatementModule {
   save(key, description) {
 
   }
-  delete(key) {
+  delete(eventObj) {
 
   }
   // Finds appropriate key for a new statement
   getKey(event) {
     const eventEl = event.target,
-      keyWord = eventEl.getAttribute("data-containerPurpose");
+    keyWord = eventEl.getAttribute("data-containerPurpose");
     let identifIndex = 1;
     allExistKeys = [];
     // Get access to statement container
@@ -24,7 +24,7 @@ class StatementModule {
         identifIndex++;
       }
     }
-    return keyWord + "_" + identifIndex;
+    observer.publish('model.statement-creation', keyWord + "_" + identifIndex);
   }
   // to get all existing identifiers of certain  key word
   getKeyIndexes(keyword) {
@@ -69,15 +69,14 @@ class sectionItemView {
   bindEvent() {
     const that = this;
     // the creation event of new statement
-    const creationButton = this.section.querySelector('[data-containerpurpose]');
-    creationButton.addEventListener('click', function (event) {
-
-    })
     this.delButton.addEventListener('click', function () {
-
+      toDeleteBlock
     });
-    observer.subscribe('model.statement-getContainer', function() {
+    observer.subscribe('model.statement-getContainer', function () {
       that.getContainer(accessToButton);
+    });
+    observer.subscribe('model.statement-creation', function(key) {
+      that.createStatement(key);
     });
   }
   // Create structure for statement
@@ -90,6 +89,7 @@ class sectionItemView {
     container.appendChild(editElement).appendChild(delButton);
     return container;
   }
+  // To get access to statments container
   getContainer(accessToButton) {
     if (typeof accessToButton === "object") {
       const button = accessToButton.target;
@@ -97,7 +97,7 @@ class sectionItemView {
       var button = document.querySelector("[data-containerPurpose = " + accessToButton + "]");
     }
     const section = button.closest(".layer"),
-    container = section.querySelector(".layerDescription");
+      container = section.querySelector(".layerDescription");
     return container;
   }
 }
@@ -126,14 +126,28 @@ class Controller {
     observer.subscribe('view.statement-getIndexes', function (keyWord) {
       that.getKeyIndexes(keyWord);
     });
+    observer.subscribe('view.statement-getKey', function(event) {
+      that.getKey(event);
+    });
+  }
+  getKey(event) {
+    this.model.getKey(event);
   }
   // My controller itself does not provide data for the views, but allows each render method to get the data using its methods.
-  getIndexes(keyWord) {
+  getKeyIndexes(keyWord) {
     this.model.getKeyIndexes(keyWord);
   }
 }
 
 
-
+(function () {
+  const newStatementButs = document.getElementsByClassName('.newStatement');
+  for (let button of newStatementButs) {
+    button.addEventListener('click', function (eventObj) {
+      // First gets appropriate key by model method, then invokes the creation new statement  method of view as a callback
+      eventObj.preventDefault('view.statement-getKey', eventObj);
+    });
+  }
+})();
 // observer.publish('view.statement-key.add', ) -- хорошее имя события, использовать
 // TODO переместить скачанные в торрент книгу о паттернах в книги
