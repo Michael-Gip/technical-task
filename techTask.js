@@ -126,9 +126,9 @@ class ParentView {
   constructor(views) {
     this.views = views || [];
   }
-  render(dataModel) {
+  render() {
     this.views.forEach((view) => {
-      view.render(dataModel);
+      view.render();
     })
   }
 }
@@ -136,9 +136,13 @@ class ParentView {
 
 // Application logic
 class Controller {
+  constructor(model, view) {
+    // it is not entirely clear why in this case I have a module here
+    this.model = model;
+    this.view = view;
+  }
   initialize() {
     this.view.render();
-    //  TODO: Don't foget about events
   }
   bindEvent() {
     const that = this;
@@ -174,5 +178,5 @@ class Controller {
     });
   }
 })();
-// observer.publish('view.statement-key.add', ) -- хорошее имя события, использовать
+
 // TODO переместить скачанные в торрент книгу о паттернах в книги
