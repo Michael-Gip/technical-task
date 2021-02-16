@@ -3,12 +3,16 @@ class StatementModule {
 
   }
   delete(eventObj) {
-
+    //Get and remove localStorage key
+    const container = (eventObj.target).closest("p"),
+    key = container.querySelector("[data-point]").getAttribute("data-point");
+    localStorage.removeItem(key);
+    observer.publish('model.statement-deleted', container);
   }
   // Finds appropriate key for a new statement
   getKey(event) {
     const eventEl = event.target,
-    keyWord = eventEl.getAttribute("data-containerPurpose");
+      keyWord = eventEl.getAttribute("data-containerPurpose");
     let identifIndex = 1;
     allExistKeys = [];
     // Get access to statement container
@@ -75,8 +79,11 @@ class sectionItemView {
     observer.subscribe('model.statement-getContainer', function () {
       that.getContainer(accessToButton);
     });
-    observer.subscribe('model.statement-creation', function(key) {
+    observer.subscribe('model.statement-creation', function (key) {
       that.createStatement(key);
+    });
+    observer.subscribe('model.statement-deleted', function(statement) {
+      that.deleteStatement(statement);
     });
   }
   // Create structure for statement
@@ -99,6 +106,9 @@ class sectionItemView {
     const section = button.closest(".layer"),
       container = section.querySelector(".layerDescription");
     return container;
+  }
+  deleteStatement(statement) {
+    statement.remove();
   }
 }
 
@@ -126,7 +136,7 @@ class Controller {
     observer.subscribe('view.statement-getIndexes', function (keyWord) {
       that.getKeyIndexes(keyWord);
     });
-    observer.subscribe('view.statement-getKey', function(event) {
+    observer.subscribe('view.statement-getKey', function (event) {
       that.getKey(event);
     });
   }
