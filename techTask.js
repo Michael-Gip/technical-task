@@ -1,11 +1,14 @@
 class StatementModule {
-  save(key, description) {
-
+  store(event) {
+    const editEl = event.target,
+      key = editEl.getAttribute("data-point"),
+      content = editEl.innerHTML;
+    localStorage.setItem(key, content);
   }
   delete(eventObj) {
     //Get and remove localStorage key
     const container = (eventObj.target).closest("p"),
-    key = container.querySelector("[data-point]").getAttribute("data-point");
+      key = container.querySelector("[data-point]").getAttribute("data-point");
     localStorage.removeItem(key);
     observer.publish('model.statement-deleted', container);
   }
@@ -74,7 +77,17 @@ class sectionItemView {
     const that = this;
     // the creation event of new statement
     this.delButton.addEventListener('click', function () {
-      toDeleteBlock
+      clearInputField
+    });
+    this.editElement.addEventListener('click', function (eventObj) {
+      /* To delete default text from statement block */
+      const el = eventObj.target;
+      if (el.innerHTML === "Write new statement") {
+        el.innerHTML = "";
+      }
+    });
+    this.editElement.addEventListener('blur', function (eventObj) {
+      observer.publish('view.statement-store', eventObj);
     });
     observer.subscribe('model.statement-getContainer', function () {
       that.getContainer(accessToButton);
@@ -82,7 +95,7 @@ class sectionItemView {
     observer.subscribe('model.statement-creation', function (key) {
       that.createStatement(key);
     });
-    observer.subscribe('model.statement-deleted', function(statement) {
+    observer.subscribe('model.statement-deleted', function (statement) {
       that.deleteStatement(statement);
     });
   }
@@ -98,11 +111,7 @@ class sectionItemView {
   }
   // To get access to statments container
   getContainer(accessToButton) {
-    if (typeof accessToButton === "object") {
-      const button = accessToButton.target;
-    } else {
-      var button = document.querySelector("[data-containerPurpose = " + accessToButton + "]");
-    }
+    button = (typeof accessToButton === "object") ? accessToButton.target : document.querySelector("[data-containerPurpose = " + accessToButton + "]");
     const section = button.closest(".layer"),
       container = section.querySelector(".layerDescription");
     return container;
@@ -139,6 +148,9 @@ class Controller {
     observer.subscribe('view.statement-getKey', function (event) {
       that.getKey(event);
     });
+    observer.subscribe('view.statement-store', function (eventObj) {
+      that.store(eventObj);
+    });
   }
   getKey(event) {
     this.model.getKey(event);
@@ -146,6 +158,9 @@ class Controller {
   // My controller itself does not provide data for the views, but allows each render method to get the data using its methods.
   getKeyIndexes(keyWord) {
     this.model.getKeyIndexes(keyWord);
+  }
+  store(eventObj) {
+    this.model.store(eventObj);
   }
 }
 
