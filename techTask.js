@@ -76,8 +76,8 @@ class sectionItemView {
   bindEvent() {
     const that = this;
     // the creation event of new statement
-    this.delButton.addEventListener('click', function () {
-      clearInputField
+    this.delButton.addEventListener('click', function (eventObj) {
+      observer.publish('view.statement-delete', eventObj);
     });
     this.editElement.addEventListener('click', function (eventObj) {
       /* To delete default text from statement block */
@@ -146,14 +146,17 @@ class Controller {
   }
   bindEvent() {
     const that = this;
+    observer.subscribe('view.statement-store', function (eventObj) {
+      that.store(eventObj);
+    });
+    observer.subscribe('view.statement-delete', function (eventObj) {
+      that.delete(eventObj);
+    });
     observer.subscribe('view.statement-getIndexes', function (keyWord) {
       that.getKeyIndexes(keyWord);
     });
     observer.subscribe('view.statement-getKey', function (event) {
       that.getKey(event);
-    });
-    observer.subscribe('view.statement-store', function (eventObj) {
-      that.store(eventObj);
     });
   }
   getKey(event) {
@@ -165,6 +168,9 @@ class Controller {
   }
   store(eventObj) {
     this.model.store(eventObj);
+  }
+  delete(eventObj) {
+    this.model.delete(eventObj);
   }
 }
 
