@@ -1,3 +1,41 @@
+const observer = (function() {
+  const events = [];
+  const subscribe = function(eventName, callback) {
+    if (!events.hasOwnProperty(eventName)) {
+      events[eventName] = [];
+    };
+    events[eventName].push(callback);
+  },
+  unsubscribe = function(eventName, callback) {
+    if (events.hasOwnProperty(eventName)) {
+      if (callback === undefined) {
+        delete events[eventName];
+        return;
+      }
+      const length = events[eventName].length;
+      for (let index = 0; i < length; i++) {
+        if (events[eventName][index] === callback) {
+          events[eventName].splice(index, 1);
+          break;
+        };
+      };
+    };
+  },
+  publish = function(eventName, data) {
+    if (events.hasOwnProperty(eventName)) {
+      events[eventName].forEach(function(handler) {
+        handler(data);
+      });
+    };
+  };
+  return {
+    subscribe: subscribe,
+    unsubscribe: unsubscribe,
+    publish: publish
+  }
+})();
+
+
 class StatementModule {
   store(event) {
     const editEl = event.target,
@@ -89,7 +127,7 @@ class sectionItemView {
     this.editElement.addEventListener('blur', function (eventObj) {
       observer.publish('view.statement-store', eventObj);
     });
-    observer.subscribe('model.statement-getContainer', function () {
+    observer.subscribe('model.statement-getContainer', function (accessToButton) {
       that.getContainer(accessToButton);
     });
     observer.subscribe('model.statement-creation', function (key) {
